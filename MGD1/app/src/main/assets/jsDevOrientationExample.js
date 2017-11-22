@@ -91,7 +91,6 @@ function renderSplat(leftX, topY, width, height, drawColour) {
 
 
 var devOrientation = { devXValue: 0, devYValue: 0, devRotationValue: 0 };
-Mobile
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -146,6 +145,7 @@ function gameLoop() {
     var elapsed = (Date.now() - startTimeMS) / 1000;
     update(elapsed);
     render(elapsed);
+    collisionDetection(theBall, theSplat);
     startTimeMS = Date.now();
     requestAnimationFrame(gameLoop);
 }
@@ -159,17 +159,17 @@ function render(delta) {
 function update(delta) {
     theBall.velocity.x = devOrientation.devXValue;
     theBall.velocity.y = devOrientation.devYValue;
-
+    if (theBall.position.x <= 0 || theBall.position.x > (canvas.width - theBall.radius)) theBall.velocity.x *= -1;
+    if (theBall.position.y <= 0 || theBall.position.y > (canvas.height - theBall.radius)) theBall.velocity.y *= -1;
     theBall.position.x += theBall.velocity.x;
     theBall.position.y += theBall.velocity.y;
-
-    if (theBall.position.x < 0 || theBall.position.x > (canvas.width - theBall.radius)) theBall.velocity.x *= -1;
-    if (theBall.position.y < 0 || theBall.position.y > (canvas.height - theBall.radius)) theBall.velocity.y *= -1;
-
 }
 
-function collisionDetection() {
-
+function collisionDetection(ball, splat) {
+    if ((ball.position.x - ball.radius) < splat.position.x + splat.size.width || ball.position.x + ball.radius > splat.x )
+    {
+        console.log(" the ball on the same x section");
+    }
 }
 
 function styleText(txtColour, txtFont, txtAlign, txtBaseline) {
